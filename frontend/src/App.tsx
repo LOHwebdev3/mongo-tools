@@ -92,7 +92,7 @@ const App = () => {
     return(<div className={'w-screen h-screen flex flex-col'}>
     <div className={'w-full h-fit flex flex-row p-2 border border-solid border-black gap-1'}>
       <div className={'flex flex-col items-start w-1/2 h-full p-2 gap-0.5  border border-solid border-black rounded-lg'}>
-          <p>Host A</p>
+          <p>Dump From</p>
           <hr/>
           Host
           <input name={'MONGODB_HOST'} className={'w-full h-full border border-solid border-black rounded-lg p-1'} placeholder={'Host'} onChange={(e) => setStateA({...stateA, [e.target.name]: e.target.value})} value={stateA.MONGODB_HOST}/>
@@ -108,7 +108,7 @@ const App = () => {
           <input name={'MONGODB_DB'}className={'w-full h-full border border-solid border-black rounded-lg p-1'} placeholder={'DB'} onChange={(e) => setStateA({...stateA, [e.target.name]: e.target.value})} value={stateA.MONGODB_DB}/>
       </div>
         <div className={'flex flex-col items-start w-1/2 h-full p-2 gap-0.5  border border-solid border-black rounded-lg'}>
-            <p>Host B</p>
+            <p>Restore To</p>
             <hr/>
             Host
             <input name={'MONGODB_HOST'} className={'w-full h-full border border-solid border-black rounded-lg p-1'} placeholder={'Host'} onChange={(e) => setStateB({...stateB, [e.target.name]: e.target.value})} value={stateB.MONGODB_HOST}/>
