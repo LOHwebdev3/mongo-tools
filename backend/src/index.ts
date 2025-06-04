@@ -99,6 +99,12 @@ app.post('/api/dump', async (req, res) => {
 
 
 app.post('/api/restore', async (req, res) => {
+
+
+    if (req.body.MONGODB_HOST.includes('203')){
+        res.status(400).send({})
+        return;
+    }
     const restoreProcess = spawn('mongorestore', [
         `--uri="mongodb://${req.body.MONGODB_USER}:${req.body.MONGODB_PASS}@${req.body.MONGODB_HOST}:${req.body.MONGODB_PORT}/${req.body.MONGODB_DB}?authSource=${req.body.MONGODB_DB_AUTH}"`,
         `${req.body.folder}/`,
