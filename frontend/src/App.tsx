@@ -26,7 +26,7 @@ const App = () => {
     });
 
     const onDump = async () => {
-        if (!stateA.MONGODB_HOST||stateA.MONGODB_PORT||stateA.MONGODB_USER||stateA.MONGODB_PASS||stateA.MONGODB_DB_AUTH||stateA.MONGODB_DB) {
+        if (!stateA.MONGODB_HOST||!stateA.MONGODB_PORT||!stateA.MONGODB_USER||!stateA.MONGODB_PASS||!stateA.MONGODB_DB_AUTH||!stateA.MONGODB_DB) {
             return;
         }
 
