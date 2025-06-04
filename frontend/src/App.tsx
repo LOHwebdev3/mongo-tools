@@ -26,12 +26,11 @@ const App = () => {
     });
 
     const onDump = async () => {
-        if (!stateA.MONGODB_HOST||!stateA.MONGODB_PORT||!stateA.MONGODB_USER||!stateA.MONGODB_PASS||!stateA.MONGODB_DB_AUTH||!stateA.MONGODB_DB) {
+        if (stateA.MONGODB_HOST===''||stateA.MONGODB_PORT===''||stateA.MONGODB_USER===''||stateA.MONGODB_PASS===''||stateA.MONGODB_DB_AUTH===''||stateA.MONGODB_DB==='') {
             return;
         }
 
         const dateString = new Date().toISOString().replace(/[:.]/g, '-');
-        console.debug(`dateString => `, dateString);
         setFolder(dateString)
 
         const res = await fetch('http://localhost:4000/api/dump', {
@@ -41,7 +40,6 @@ const App = () => {
             },
             body:JSON.stringify({...stateA,folder:dateString,selects})
         });
-        console.debug(`res => `, res);
         if (localStorage){
             localStorage.setItem('stateA', JSON.stringify(stateA));
             localStorage.setItem('stateB', JSON.stringify(stateB));
@@ -56,7 +54,6 @@ const App = () => {
             },
             body:JSON.stringify({...stateB,folder:folder+'/'+stateA.MONGODB_DB})
         });
-        console.debug(`res => `, res);
         if (localStorage){
             localStorage.setItem('stateA', JSON.stringify(stateA));
             localStorage.setItem('stateB', JSON.stringify(stateB));
@@ -65,6 +62,9 @@ const App = () => {
 
 
     const getAllCollections = async (state: any) => {
+        if (stateA.MONGODB_HOST===''||stateA.MONGODB_PORT===''||stateA.MONGODB_USER===''||stateA.MONGODB_PASS===''||stateA.MONGODB_DB_AUTH===''||stateA.MONGODB_DB==='') {
+            return;
+        }
         const res = await fetch('http://localhost:4000/api/all-collections', {
             body:JSON.stringify({...state,folder})
             , method: 'POST',
@@ -74,15 +74,17 @@ const App = () => {
         })
 
         const json = await res.json();
+        if ((json.data ?? []).length > 0){
         setCollections((json.data ?? []).sort((a: string, b: string) => a.localeCompare(b)));
+        return (json.data ?? []).sort((a: string, b: string) => a.localeCompare(b))
+        }
 
     }
 
 
 
-    // @ts-ignore
-    useEffect( async () => {
-        await getAllCollections(stateA)
+    useEffect(() => {
+        getAllCollections(stateA).then(r => r);
     }, [stateA]);
 
 

@@ -12,21 +12,23 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.post('/api/all-collections', async (req, res) => {
-    const uri = `mongodb://${req.body.MONGODB_USER}:${req.body.MONGODB_PASS}@${req.body.MONGODB_HOST}:${req.body.MONGODB_PORT}/${req.body.MONGODB_DB}?authSource=${req.body.MONGODB_DB_AUTH}`
-    const client = new MongoClient(uri)
-    await client.connect().then(()=>{
-        console.debug(`Connected to MongoDB`);
-    });
-    const db = client.db(req.body.MONGODB_DB);
-    const collections = await db.listCollections().toArray();
-    const cols= collections.map((col) => col.name)
-    res.json({ data:cols??[] });
+    try {
+        const uri = `mongodb://${req.body.MONGODB_USER}:${req.body.MONGODB_PASS}@${req.body.MONGODB_HOST}:${req.body.MONGODB_PORT}/${req.body.MONGODB_DB}?authSource=${req.body.MONGODB_DB_AUTH}`
+        const client = new MongoClient(uri)
+        await client.connect().then(()=>{
+            console.debug(`Connected to MongoDB`);
+        });
+        const db = client.db(req.body.MONGODB_DB);
+        const collections = await db.listCollections().toArray();
+        const cols= collections.map((col) => col.name)
+        res.json({ data:cols??[] });
+    }catch (e) {
+        res.json({ data:[] });
+    }
 });
 
 
 app.post('/api/dump', async (req, res) => {
-    console.debug(`req.body => `, req.body);
-
     if (req.body.selects && Array.isArray(req.body.selects)&&req.body.selects.length > 0) {
         for (const col of req.body.selects) {
             if (col) {
@@ -97,7 +99,6 @@ app.post('/api/dump', async (req, res) => {
 
 
 app.post('/api/restore', async (req, res) => {
-    console.debug(`req.body => `, req.body);
     const restoreProcess = spawn('mongorestore', [
         `--uri="mongodb://${req.body.MONGODB_USER}:${req.body.MONGODB_PASS}@${req.body.MONGODB_HOST}:${req.body.MONGODB_PORT}/${req.body.MONGODB_DB}?authSource=${req.body.MONGODB_DB_AUTH}"`,
         `${req.body.folder}/`,
