@@ -6,7 +6,7 @@ import './index.css'
 const App = () => {
     const [collections, setCollections] = useState([]);
     const [selects, setSelects] = useState(JSON.parse(localStorage.getItem('select') as string)??[]);
-    const [folder, setFolder] = useState('dump');
+    const [folder, setFolder] = useState(JSON.parse(localStorage.getItem('folder') as string)??'dump');
     const [stateA, setStateA] = useState(JSON.parse(localStorage.getItem('stateA') as string)??{
         MONGODB_HOST:'',
         MONGODB_PORT:'',
